@@ -93,8 +93,7 @@
         0 0 90px var(--pink),
         0 0 130px var(--pink),
         0 0 170px var(--pink);
-      animation: textPulse 3.5s ease-in-out infinite,
-                 textFlicker 9s linear infinite;
+      animation: textPulse 3.5s ease-in-out infinite;
     }
 
     /* hover brightens */
@@ -131,12 +130,9 @@
       }
     }
 
-    @keyframes textFlicker {
-      0%,   18%,  20%,   22%,  24%,   53%,  55%,   57%,  100% { opacity: 1; }
-      19%,  21%                                                 { opacity: 0.55; }
-      23%                                                       { opacity: 0.85; }
-      54%,  56%                                                 { opacity: 0.25; }
-    }
+    .neon-text.glitch-dim  { opacity: 0.25; transition: opacity 0.01s; }
+    .neon-text.glitch-mid  { opacity: 0.55; transition: opacity 0.01s; }
+    .neon-text.glitch-off  { opacity: 0.85; transition: opacity 0.01s; }
 
     .sign-hint {
       font-size: 0.62rem;
@@ -624,7 +620,15 @@
     });
   }
 
-  // random glitch: brief drop-outs at irregular intervals
+  const neonText = document.querySelector('.neon-text');
+
+  function visualGlitch(dimClass, dur) {
+    if (!neonText) return;
+    neonText.classList.add(dimClass);
+    setTimeout(() => neonText.classList.remove(dimClass), dur);
+  }
+
+  // random glitch: syncs audio drop-out with visual flicker
   function scheduleGlitch() {
     if (!ctx || !master) return;
     const delay = 0.4 + Math.random() * 1.8;
@@ -632,13 +636,22 @@
       if (!ctx || master.gain.value < 0.01) return;
       const t = ctx.currentTime;
       const dropDur = 0.02 + Math.random() * 0.06;
+      const dropMs  = dropDur * 1000;
+
+      // audio
       master.gain.setTargetAtTime(0, t, 0.005);
       master.gain.setTargetAtTime(0.08, t + dropDur, 0.01);
+      // visual — sync with audio
+      visualGlitch('glitch-dim', dropMs);
+
       // occasional double-stutter
       if (Math.random() > 0.5) {
-        master.gain.setTargetAtTime(0, t + dropDur + 0.04, 0.005);
-        master.gain.setTargetAtTime(0.08, t + dropDur + 0.07, 0.01);
+        const gap = dropDur + 0.04;
+        master.gain.setTargetAtTime(0, t + gap, 0.005);
+        master.gain.setTargetAtTime(0.08, t + gap + 0.03, 0.01);
+        setTimeout(() => visualGlitch('glitch-mid', 30), gap * 1000);
       }
+
       scheduleGlitch();
     }, delay * 1000);
   }
