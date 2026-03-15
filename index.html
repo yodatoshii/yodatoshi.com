@@ -658,10 +658,13 @@
 
   function buzzOn() {
     boot();
-    if (ctx.state === 'suspended') ctx.resume();
-    master.gain.cancelScheduledValues(ctx.currentTime);
-    master.gain.setTargetAtTime(0.08, ctx.currentTime, 0.12);
-    scheduleGlitch();
+    const start = () => {
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setTargetAtTime(0.08, ctx.currentTime, 0.12);
+      scheduleGlitch();
+    };
+    if (ctx.state === 'suspended') ctx.resume().then(start);
+    else start();
   }
 
   function buzzOff(delay = 0) {
