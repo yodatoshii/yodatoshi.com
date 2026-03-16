@@ -735,53 +735,6 @@
   });
 
 
-// ── Bio typewriter ────────────────────────────────────────────
-(function () {
-  const p      = document.querySelector('.bio-text');
-  const cursor = p.querySelector('.bio-cursor');
-
-  const raw = p.innerHTML
-    .replace(/<span class="bio-cursor"><\/span>/, '')
-    .replace(/\n\s+/g, ' ')
-    .trim();
-
-  // measure final height before clearing
-  p.style.minHeight = p.offsetHeight + 'px';
-
-  p.innerHTML = '';
-  p.appendChild(cursor);
-
-  let i = 0, built = '';
-
-  function delay(ch) {
-    if (ch === '.' || ch === '—') return 320 + Math.random() * 180;
-    if (ch === ',')               return 140 + Math.random() * 80;
-    if (ch === ' ')               return 35  + Math.random() * 30;
-    // random stutter: 1 in 14 chance of a short hesitation
-    if (Math.random() < 0.07)    return 120 + Math.random() * 100;
-    return 38 + Math.random() * 28;
-  }
-
-  function type() {
-    if (i >= raw.length) return;
-
-    if (raw[i] === '<') {
-      const end = raw.indexOf('>', i);
-      built += raw.slice(i, end + 1);
-      i = end + 1;
-      p.innerHTML = built + '<span class="bio-cursor"></span>';
-      setTimeout(type, 0);
-    } else {
-      const ch = raw[i++];
-      built += ch;
-      p.innerHTML = built + '<span class="bio-cursor"></span>';
-      setTimeout(type, delay(ch));
-    }
-  }
-
-  // cursor blinks alone for a beat before typing starts
-  setTimeout(type, 900);
-})();
 </script>
 </body>
 </html>
