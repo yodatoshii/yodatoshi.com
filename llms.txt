@@ -1,0 +1,20 @@
+# yodatoshi
+
+> builder of small tools and strange ideas. writes code at odd hours. ships when it feels right. drawn to the edges — where systems break and become something new.
+
+## About
+
+yodatoshi is an independent developer focused on building small, sharp tools and exploring ideas at the edges of systems.
+
+## Projects
+
+- **vallley** — job board built for startup founders and early-stage teams
+- **dott** — fast CLI for domain availability search, no registrar middlemen
+- **lucy** — personal macOS music player built on Spotify
+
+## Contact
+
+- GitHub: https://github.com/yodatoshicom
+- X: https://x.com/0x42a
+- Email: alex@yodatoshi.com
+- Website: https://yodatoshi.com
