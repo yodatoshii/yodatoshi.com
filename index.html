@@ -734,6 +734,42 @@
     document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
   });
 
+
+// ── Bio typewriter ────────────────────────────────────────────
+(function () {
+  const p      = document.querySelector('.bio-text');
+  const cursor = p.querySelector('.bio-cursor');
+
+  // grab full html, strip the cursor span, normalize whitespace
+  const raw = p.innerHTML
+    .replace(/<span class="bio-cursor"><\/span>/, '')
+    .replace(/\n\s+/g, ' ')
+    .trim();
+
+  p.innerHTML = '';
+  p.appendChild(cursor);
+
+  let i = 0, built = '';
+
+  function type() {
+    if (i >= raw.length) return;
+
+    if (raw[i] === '<') {
+      // swallow whole tag instantly
+      const end = raw.indexOf('>', i);
+      built += raw.slice(i, end + 1);
+      i = end + 1;
+      p.innerHTML = built + '<span class="bio-cursor"></span>';
+      setTimeout(type, 0);
+    } else {
+      built += raw[i++];
+      p.innerHTML = built + '<span class="bio-cursor"></span>';
+      setTimeout(type, 28);
+    }
+  }
+
+  setTimeout(type, 400);
+})();
 </script>
 </body>
 </html>
