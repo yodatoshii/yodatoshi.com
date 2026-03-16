@@ -745,6 +745,9 @@
     .replace(/\n\s+/g, ' ')
     .trim();
 
+  // measure final height before clearing
+  p.style.minHeight = p.offsetHeight + 'px';
+
   p.innerHTML = '';
   p.appendChild(cursor);
 
